@@ -2,35 +2,22 @@
     x-transition:enter="duration-300 ease-out"
     x-transition:enter-start="opacity-0 -mt-96"
     x-transition:enter-end="opacity-100 mt-0">
-        <section class="card p-4">
-            <h2>Categories</h2>
-            <ul class="hoverlist">
-                <li class="highlight">
-                    <a href="">
-                        <img class="w-8 h-8 object-cover mr-2" src="https://img.icons8.com/small/96/null/landscape.png">
-                        <span class="font-bold text-sm">Landscape</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <img class="w-8 h-8 object-cover mr-2" src="https://img.icons8.com/small/96/null/portrait.png">
-                        <span class="font-bold text-sm">People</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <img class="w-8 h-8 object-cover mr-2" src="https://img.icons8.com/small/96/null/dog.png">
-                        <span class="font-bold text-sm">Animals</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <img class="w-8 h-8 object-cover mr-2" src="https://img.icons8.com/small/96/null/180-degrees.png">
-                        <span class="font-bold text-sm">Black & White</span>
-                    </a>
-                </li>
-            </ul>
-        </section>
+    <section class="card p-4 mt-6">
+    <h2 class="text-lg font-semibold text-gray-800 mb-3">Categories</h2>
+
+    <ul class="flex flex-wrap gap-2">
+        {% for tag in tags %}
+        <li>
+            <a href="{% url 'tag-posts' tag.slug %}" 
+               class="inline-block px-3 py-1 text-xs font-medium text-gray-700 bg-gray-100 
+                      rounded-full  hover:text-blue-600 transition-colors duration-200">
+                {{ tag.name }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+
         <section class="card p-4">
             <div class="flex items-center">
                 <img class="w-7 mr-2 -mt-3" src="https://img.icons8.com/ios-glyphs/90/null/fire-heart.png"/>
