@@ -1,13 +1,15 @@
 from django.db import models
 import uuid
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
+
 # Create your models here.
 class Post(models.Model):
     title = models.CharField(max_length=500, blank=True, null=True)
     image = models.URLField(max_length=500, blank=True, null=True)
     artist= models.CharField(max_length=500,blank=True,null=True)
     url = models.URLField(max_length=500,blank=True, null=True)
-    
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='posts')
     caption = models.CharField(max_length=500)
     description = models.TextField(blank=True, null=True)
     

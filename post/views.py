@@ -17,6 +17,12 @@ def home_view(request):
     posts = Post.objects.all().order_by('-created_at')
     tags = Tag.objects.all() 
     form = PostCreateForm()
+    # In your view
+    sort_option = request.GET.get('sort', 'new')
+    if sort_option == 'old':
+        posts = Post.objects.all().order_by('created_at')
+    else:
+        posts = Post.objects.all().order_by('-created_at')
     
     if request.method == 'POST':
         form = PostCreateForm(request.POST, request.FILES)

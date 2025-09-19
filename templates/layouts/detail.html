@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block layout %}
+
+<content class="block max-w-4xl mx-auto my-6 px-4">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- Left column: Post content (3/4 width) -->
+        <div class="lg:col-span-2">
+            {% block post_content %}
+            {% endblock %}
+        </div>
+        
+        <!-- Right column: Comments and interactions (1/4 width) -->
+        <div class="lg:col-span-2">
+            {% block comments_content %}
+            {% endblock %}
+        </div>
+    </div>
+</content>
+
+{% endblock %}

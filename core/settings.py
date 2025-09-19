@@ -11,13 +11,21 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from environ import Env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR/ = Path(__file__).resolve().parent
+
+# env = Env()
+# env.read_env()  # read .env file, if it exists
+# Initialize environment reader
+env = Env()
+
+# Tell it where to find the .env file (inside core/)
+env.read_env(BASE_DIR / 'core' / '.env')
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure--!g#&kx%kc2_&8tin*=2_1@j9*9f4etms8iz8ti-u2nty^xojz'
@@ -37,8 +45,36 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'django_cleanup.apps.CleanupConfig',  # Automatically delete old files.
     'post',
+    'users',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
+    
 ]
+
+SITE_ID = 1
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+      
+        'APP': {
+            'client_id': env("OAUTH_GOOGLE_CLIENT_ID"),
+            'secret': env("OAUTH_GOOGLE_SECRET"),
+            
+        },
+    },
+    # 'github': {
+    #     'APP': {
+    #         'client_id': 'env("OAUTH_GITHUB_CLIENT_ID")',
+    #         'secret': 'env("OAUTH_GITHUB_SECRET")',
+    #     },
+    # },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -48,6 +84,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    # Add the account middleware:
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -59,6 +98,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                 # `allauth` needs this from django
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -66,6 +106,12 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
@@ -128,3 +174,12 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGIN_REDIRECT_URL = '/'
+
+# DJAFNGO EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
