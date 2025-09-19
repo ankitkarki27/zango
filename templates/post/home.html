@@ -1,13 +1,28 @@
 {% extends 'layouts/a.html' %}
 
 {% block content %}
-<div class="max-w-2xl mx-auto space-y-6 mt-6">
-        <!-- Include post creation form at the top -->
+<div class="max-w-2xl mx-auto space-y-6 mt-0">
+    <!-- Include post creation form at the top -->
     {% include 'post/post_create_component.html' %}
 
+    <!-- Minimal Feed Header -->
+    <div class="flex items-center justify-left">
+        <!-- <h2 class="text-lg font-medium text-gray-800">Your Feed</h2> -->
+        
+        <div class="flex items-center  space-x-1">
+            <a href="?sort=new" class="text-xs px-2 py-1 rounded {% if request.GET.sort == 'new' or not request.GET.sort %}bg-blue-400 text-white{% else %}text-gray-500 hover:text-gray-700{% endif %} transition-colors">
+                New
+            </a>
+            <span class="text-gray-300">|</span>
+            <a href="?sort=old" class="text-xs px-2 py-1 rounded {% if request.GET.sort == 'old' %}bg-blue-500 text-white{% else %}text-gray-500 hover:text-gray-700{% endif %} transition-colors">
+                Old
+            </a>
+        </div>
+    </div>
+
+    <!-- Posts -->
     {% for post in posts %}
-   
     {% include 'post/post.html' %}
     {% endfor %}
 </div>
-{% endblock %}
+{% endblock %}  

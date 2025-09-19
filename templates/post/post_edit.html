@@ -2,25 +2,59 @@
 
 {% block content %}
 
-<h1>Edit Post</h1>
-<div class="card p-4">
-    <div class="flex items-center mb-4">
-        <img class="w-20 h-20 object-cover rounded-xl mr-4" src="{{ post.image }}">
-        <!-- <h3 class="text-lg font-bold">{{ post.caption }}</h3> -->
-    </div>
+<div class="max-w-md mx-auto border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
+    <h1 class="text-lg font-semibold text-gray-800 mb-6 text-center">Edit Post</h1>
     
-    
-    <div class="pb-2">
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}  {# renders all form fields with proper binding #}
-
-            <div class="pt-4">
-                <button type="submit">Submit</button>
-                <a class="button secondaryAction ml-1" href="{% url 'home' %}">Go Back</a>
+    <form method="POST" class="space-y-5">
+        {% csrf_token %}
+        
+        <!-- Display non-tag fields first -->
+        {% for field in form %}
+            {% if field.name != 'tags' %}
+            <div>
+                <!-- <label for="{{ field.id_for_label }}" class="block text-xs font-medium text-gray-600 mb-1 uppercase tracking-wide">
+                    {{ field.label }}
+                </label> -->
+                {{ field }}
+                {% if field.help_text %}
+                <p class="mt-1 text-xs text-gray-400">{{ field.help_text }}</p>
+                {% endif %}
+                {% for error in field.errors %}
+                <p class="mt-1 text-xs text-red-500">{{ error }}</p>
+                {% endfor %}
             </div>
-        </form>
-    </div>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Tags field displayed like the home page component -->
+        {% if form.tags %}
+        <div>
+            <div class="flex flex-wrap gap-1">
+                {% for tag in form.tags.field.queryset %}
+                <div class="relative">
+                    <input type="checkbox" name="tags" value="{{ tag.id }}" id="tag{{ tag.id }}" 
+                           class="hidden peer" {% if tag.id in form.tags.value %}checked{% endif %}>
+                    <label for="tag{{ tag.id }}" class="cursor-pointer text-xs text-gray-600 hover:text-blue-600 px-2 py-1 border rounded-full
+                       peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-transparent">
+                        {{ tag.name }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            {% if form.tags.help_text %}
+            <p class="mt-1 text-xs text-gray-400">{{ form.tags.help_text }}</p>
+            {% endif %}
+            {% for error in form.tags.errors %}
+            <p class="mt-1 text-xs text-red-500">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="flex items-center justify-left gap-3 pt-4">
+            <button type="submit" class="button text-sm px-4 py-2">Update</button>
+            <a href="{% url 'home' %}" class="secondaryAction text-sm px-4 py-2">Cancel</a>
+        </div>
+    </form>
 </div>
 
 {% endblock %}
