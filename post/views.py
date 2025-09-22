@@ -7,11 +7,7 @@ import requests
 from django.contrib import messages
 from .forms import PostCreateForm, PostEditForm
 from django.shortcuts import get_object_or_404
-
-# def home_view(request):
-#     # title = 'Zango here'
-#     posts=Post.objects.all().order_by('-created_at')
-#     return render(request, 'post/home.html', {'posts': posts})
+from django.contrib.auth.decorators import login_required
 
 def home_view(request):
     posts = Post.objects.all().order_by('-created_at')
@@ -82,7 +78,7 @@ def home_view(request):
             return redirect('home')
     
     return render(request, 'post/home.html', {'posts': posts, 'form': form, 'tags': tags})
-
+@login_required
 def post_create_view(request):
     form = PostCreateForm()
     
@@ -108,6 +104,8 @@ def post_create_view(request):
 
                         find_artist = sourcecode.select('a.owner-name')
                         post.artist = find_artist[0].text.strip() if find_artist else None
+                        
+                        post.author = request.user
 
                     elif "pinterest.com" in url:
                         website = requests.get(url, timeout=5)
@@ -123,12 +121,14 @@ def post_create_view(request):
 
                         find_artist = sourcecode.select_one('meta[property="og:site_name"]')
                         post.artist = find_artist['content'].strip() if find_artist else None
+                        post.author = request.user
 
                     else:
                         # If not flickr/pinterest, just fallback
                         post.title = form.cleaned_data['caption']
                         post.image = None
                         post.artist = None
+                        post.author = request.user
 
                 except requests.exceptions.RequestException:
                     messages.warning(request, "Could not fetch data from the URL. Post saved without scraped image/title/artist.")
@@ -140,6 +140,7 @@ def post_create_view(request):
                 post.title = form.cleaned_data['caption']
                 post.image = None
                 post.artist = None
+                post.author = request.user
 
             post.save()
             # form.save_m2m()  # Save tags
@@ -155,10 +156,10 @@ def post_create_view(request):
 
     return render(request, 'post/post_create.html', {'form': form})
 
-
+@login_required
 def post_delete_view(request, pk):
     # post = Post.objects.get(id=pk)
-    post = get_object_or_404(Post, id=pk)
+    post = get_object_or_404(Post, id=pk, author=request.user)  # Ensure only author can delete
     if request.method == "POST":  # confirm delete
         post.delete()
         messages.success(request, "Post deleted successfully!")
@@ -166,9 +167,10 @@ def post_delete_view(request, pk):
 
     return render(request, 'post/post_delete.html', {'post': post})
 
+@login_required
 def post_edit_view(request, pk):
     # post = Post.objects.get(id=pk)
-    post = get_object_or_404(Post, id=pk)
+    post = get_object_or_404(Post, id=pk, author=request.user)  # Ensure only author can edit   
     form = PostEditForm(instance=post)
     
     if request.method == "POST":  

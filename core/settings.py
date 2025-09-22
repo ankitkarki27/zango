@@ -183,3 +183,5 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
+
+ACCOUNT_USERNAME_BLACKLIST = ['admin', 'user', 'profile', 'post', 'administartor', 'moderator', 'root', 'superuser']
