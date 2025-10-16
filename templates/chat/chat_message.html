@@ -1,0 +1,24 @@
+{% if message.author == user %}
+<li class="flex justify-end">
+    <div class="bg-blue-500 text-white rounded-2xl rounded-br-sm px-4 py-2 max-w-[80%]">
+        <p class="text-sm">{{ message.body }}</p>
+        <span class="text-xs text-blue-100 opacity-70">{{ message.created|time:"H:i" }}</span>
+    </div>
+</li>
+{% else %}
+<li class="flex justify-start">
+    <div class="flex items-start space-x-2 max-w-[80%]">
+        <a href="{% url 'userprofile' message.author.username %}" class="flex-shrink-0">
+            <img class="w-8 h-8 rounded-full object-cover" src="{{ message.author.profile.avatar }}"
+                 alt="{{ message.author.username }}">
+        </a>
+        <div class="bg-white border border-gray-200 rounded-2xl rounded-bl-sm px-4 py-2">
+            <p class="text-sm text-gray-800">{{ message.body }}</p>
+            <div class="flex items-center justify-between mt-1">
+                <span class="text-xs text-gray-500">@{{ message.author.username|lower }}</span>
+              <span class="text-xs text-blue-600 text-right opacity-70">{{ message.created|time:"H:i" }}</span>
+            </div>
+        </div>
+    </div>
+</li>
+{% endif %}

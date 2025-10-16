@@ -6,329 +6,405 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zango</title>
-    <link rel="shortcut icon" type="image/png" href="{% static 'images/logo2.png' %}" />
+    <title>Conneqt</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/connect-logo-small.png' %}" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
+
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
     <style type="text/tailwindcss">
         [x-cloak] { 
             display: none !important; 
         }
+        
         :root {
+            /* your solid brand color */
+  --primary-color: #0e30c4;
+  /* your two other stops */
+  --primary-mid:   #6103C1;
+  --primary-end:   #4F42FF;
             /* Brand Colors */
-    --primary2: #0932a3;
-    --primary: #2852c4;
-    --primary-hover: rgb(18, 80, 214);
-    --primary-light: #60A5FA;
-    --primary-soft: rgba(37, 99, 235, 0.1);
+            --primary4: #18056d;
+            --primary:  #4f42ff;
+            --primary5: linear-gradient(
+    90deg,
+    #032DE7 0%,
+    #6103C1 80%,
+    #4F42FF 100%
+  );
+  /* the gradient itself must be a single declaration */
+  --primary-gradient: linear-gradient(
+    135deg,
+    var(--primary-color) 100%,
+    var(--primary-mid)   80%,
+    var(--primary-end)   100%
+  );
+            --primary2: #24AC49;
+            --primary3: #2A9D8F;
+            /*  --primary-hover: rgb(18, 80, 214); */
+        
+            --primary-hover:  #3b35cc;
+            --primary-hover2: #100444;
+            --primary-light: #030f1e;
+            --primary-soft: rgba(37, 99, 235, 0.1);
 
-    /* Neutral Colors */
-    --black: #1F2937;
-    --white: #ffffff;
-    --gray-50: #F9FAFB;
-    --gray-100: #F3F4F6;
-    --gray-200: #E5E7EB;
-    --gray-300: #D1D5DB;
-    --gray-400: #9CA3AF;
-    --gray-500: #6B7280;
-    --gray-600: #4B5563;
-    --gray-700: #374151;
-    --gray-800: #1F2937;
-    --gray-900: #111827;
+            /* Neutral Colors */
+            --black: #1F2937;
+            --white: #ffffff;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
 
         }
+        
+        .font1 {
+          font-family: "Poppins", sans-serif;
+        
+          
+        }
+
         .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        h1 {
+            @apply text-4xl font-bold mb-4
+        }
+        h2 {
+            @apply text-2xl font-bold mb-3
+        }
+        h3 {
+            @apply text-lg font-bold 
+        }
+     
+        
+       /* Button styles */
+.button, button, [type='submit'], [type='button'] {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    text-align: center;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    min-height: 2rem;
+    font-weight: 400;
+    color: white;
+    background-image: var(--primary-color);
+    width: fit-content;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    border: none;
 }
 
-.line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+/* Hover effect */
+.button:hover, button:hover, [type='submit']:hover, [type='button']:hover {
+    background-color: var(--primary-hover);
 }
-    h1 {
-        @apply text-4xl font-bold mb-4
-    }
-    h2 {
-        @apply text-2xl font-bold mb-3
-    }
-    h3 {
-        @apply text-lg font-bold 
-    }
-    .font1 {
-        font-family: var(--font1);
-    }
+
+/* Active / click effect */
+.button:active, button:active, [type='submit']:active, [type='button']:active {
+    transform: scale(0.97); /* Slightly smaller for smoother feel */
+}
+
+/* Focus effect for accessibility */
+.button:focus, button:focus, [type='submit']:focus, [type='button']:focus {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}  
+
+/* Secondary button */
+.secondaryAction, .button.secondaryAction {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    text-align: center;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    min-height: 2.5rem;
+    font-weight: 400;
+    color: var(--gray-600);
+    background-color: transparent;
+    border: 0px solid var(--gray-300);
+    width: fit-content;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+/* Hover effect */
+.secondaryAction:hover, .button.secondaryAction:hover {
+    background-color: var(--gray-100);
+    color: var(--gray-800);
+}
+
+/* Active / click effect */
+.secondaryAction:active, .button.secondaryAction:active {
+    transform: scale(0.97);
+}
+
+/* Focus effect for accessibility */
+.secondaryAction:focus, .button.secondaryAction:focus {
+    outline: 2px solid var(--gray-400);
+    outline-offset: 2px;
+}
+
+        /* Navigation */
+       .navitems > li > a {
+    @apply flex items-center gap-2 h-12 px-2 text-sm rounded-lg transition-colors;
+    color: var(--gray-800);
+}
+
+/* Hover with custom primary blue */
+.navitems > li > a:hover {
+    color: #4235f5;
     
-    /* Button styles */
-    .button, button, [type='submit'], [type='button'] {
-        display: inline-flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        text-align: center;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        padding: 0 1rem;
-        min-height: 2.2rem;
-        font-weight: 600;
-        transition: all 0.2s ease;
-        color: white;
-        background-color: var(--primary);
-        width: fit-content;
-        border: none;
-    }
-    .button:hover, button:hover, [type='submit']:hover, [type='button']:hover {
-        background-color: var(--primary-hover);
-        transform: translateY(-1px);
-    }
-    .button:active, button:active, [type='submit']:active, [type='button']:active {
-        transform: scale(0.8);
-    }
-    
-    /* Secondary button */
-    .secondaryAction {
-        background-color: transparent;
-        color: var(--gray-600);
-        border: 1px solid var(--gray-300);
-    }
-    .secondaryAction:hover, .button.secondaryAction:hover {
-        background-color: var(--gray-100);
-        color: var(--gray-800);
-    }
-    
-    /* Navigation */
-    .navitems>li>a {
-        @apply flex items-center gap-2 h-12 px-4 hover:bg-gray-200 rounded-lg transition-colors;
-        color: var(--gray-700);
-    }
-    
-    /* Card component */
-    .card {
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        position: relative;
-        border-radius: 0.75rem;
-        margin-bottom: 1.5rem;
-        background-color: white;
-        padding: 1.5rem;
-        width: 100%;
-        border: 1px solid var(--gray-200);
-    }
-    
-    /* List styling */
-    .hoverlist>* {
-        @apply hover:bg-gray-100 rounded-md transition duration-150;
-    }
-    .hoverlist>*>a {
-        @apply flex items-center p-2;
-    }
-    
-    /* Highlight state */
-    .highlight {
-        background-color: var(--primary-soft);
-    }
-    
-    /* Animations */
-    .titleBlip {
-        animation: 1s fadeIn;
-    }
-    @keyframes fadeIn {
-        0% { opacity: 0; }
-        10% { opacity: 0; }
-        100% { opacity: 1; }
-    }
-    
-    /* Form elements */
-    form p {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-    label, input {
-        display: inline-block;
-    }
-    form p label {
-        width: 7rem;
-    }
-    label {
-        margin: 6px 0 3px;
-        color: var(--gray-700);
-    }
-    input, textarea {
-        width: 100%;
-        border: 1px solid var(--gray-300);
-        border-radius: 0.5rem;
-        padding: 0.75rem 1rem;
-        background-color: var(--gray-50);
-        transition: border-color 0.2s;
-    }
-    input:focus, textarea:focus {
-        outline: none;
-        border-color: var(--primary-light);
-    }
-    input[type="file"], select {
-        background-color: white;
-        padding-left: 0;
-    }
-    label[for="id_remember"] {
-        width: auto;
-        margin-right: 0.5rem;
-    }
-    input[name="remember"] {
-        width: auto;
-    }
-    
-    /* Special buttons */
-    .btn-red {
-        background-color: #EF4444;
-    }
-    .btn-red:hover {
-        background-color: #DC2626;
-    }
-    
-    /* Login specific */
-    .login .secondaryAction {
-        box-shadow: none;
-        display: block;
-        padding: 0;
-        border: none;
-        font-size: smaller;
-        font-weight: normal;
-        min-height: auto;
-        margin-bottom: 1.5rem;
-        background: transparent;
-    }
-    .login .secondaryAction:hover {
-        color: var(--gray-500);
-        text-decoration: underline;
-        background: transparent;
-    }
-    
-    /* Tags styling */
-    #id_tags {
-        margin-bottom: 1rem;
-    }
-    #id_tags div {
-        display: inline-block;
-        margin-right: 0.5rem;  
-    }
-    #id_tags div label {
-        border-radius: 9999px;
-        padding: 0.5rem 1rem;
-        border: 1px solid var(--gray-300);
-        width: auto;
-        cursor: pointer;
-        user-select: none;
-        transition: all 0.2s;
-    }
-    #id_tags input {
-        display: none;
-    }
-    #id_tags label:has(input:checked) {
-        background-color: var(--primary);
-        color: white;
-        border: 1px solid var(--primary);
-    }
-    
-    /* Textareas */
-    .textarea, textarea {
-        margin-bottom: 1rem;
-    }
-    
-    /* Error messages */
-    .errorlist li {
-        color: #EF4444;
-        padding: 0.5rem;
-        padding-left: 1rem;
-        border-left: 3px solid #EF4444;
-        margin-bottom: 1rem;
-        background-color: #FEF2F2;
-        border-radius: 0 0.25rem 0.25rem 0;
-    }
-    
-    /* Tabs */
-    .tab {
-        cursor: pointer;
-        padding: 0.75rem 1rem;
-        color: var(--gray-600); 
-        background-color: var(--gray-100);
-        border-radius: 0.5rem;
-        text-align: center;
-        display: flex;
-        align-items: center;
-        transition: all 0.2s;
-    }
-    .tab:hover {
-        background-color: var(--gray-200);
-    }
-    .tab.selected {
-        color: white;
-        background-color: var(--primary);
-    }
-    
-    /* Reply form */
-    .replyform {
-        border-top: none;
-    }
-    .replyform textarea, .replyform input {
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-        margin-bottom: 0;
-        height: 3.2rem;
-    }
-    .replyform button {
-        margin-left: 0.5rem;
-        min-height: unset;
-    }
-    
-    /* Animations */
-    .fade-me-in.htmx-settling{
-        opacity: 0;
-    }
-    .fade-me-in {
-        opacity: 1;
-        transition: opacity 0.5s ease-out;
-    }
-    
-    /* Profile section */
-    #profile article figure img {
-        @apply aspect-[3/2] object-cover;
-    }
-    #profile article p {
-        @apply truncate leading-normal;
-    }
-    
-    /* Minimalist enhancements */
-    body {
-        color: var(--gray-800);
-        line-height: 1.6;
-    }
-    
-    /* Simplified shadows */
-    .card, .button, button, [type='submit'], [type='button'] {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-    
-    /* Cleaner focus states */
-    button:focus, input:focus, textarea:focus {
-        outline: 2px solid var(--primary-light);
-        outline-offset: 2px;
-    }
-    
+}
+
+        
+        /* Card component */
+        .card {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            background-color: white;
+            padding: 1.5rem;
+            width: 100%;
+            border: 1px solid var(--gray-200);
+        }
+        
+        /* List styling */
+        .hoverlist>* {
+            @apply hover:bg-gray-100 rounded-md transition duration-150;
+        }
+        .hoverlist>*>a {
+            @apply flex items-center p-2;
+        }
+        
+        /* Highlight state */
+        .highlight {
+            background-color: var(--primary-soft);
+        }
+        
+        /* Animations */
+        .titleBlip {
+            animation: 1s fadeIn;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            10% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        /* Form elements */
+        form p {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        label, input {
+            display: inline-block;
+        }
+        form p label {
+            width: 7rem;
+        }
+        label {
+            margin: 6px 0 3px;
+            color: var(--gray-700);
+        }
+        input, textarea {
+            width: 100%;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            background-color: var(--gray-50);
+            transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+        }
+        input[type="file"], select {
+            background-color: white;
+            padding-left: 0;
+        }
+        label[for="id_remember"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+        input[name="remember"] {
+            width: auto;
+        }
+        
+        /* Special buttons */
+        .btn-red {
+            background-color: #EF4444;
+        }
+        .btn-red:hover {
+            background-color: #DC2626;
+        }
+        
+        /* Login specific */
+        .login .secondaryAction {
+            box-shadow: none;
+            display: block;
+            padding: 0;
+            border: none;
+            font-size: smaller;
+            font-weight: normal;
+            min-height: auto;
+            margin-bottom: 1.5rem;
+            background: transparent;
+        }
+        .login .secondaryAction:hover {
+            color: var(--gray-500);
+            text-decoration: underline;
+            background: transparent;
+        }
+        
+        /* Tags styling */
+        #id_tags {
+            margin-bottom: 1rem;
+        }
+        #id_tags div {
+            display: inline-block;
+            margin-right: 0.5rem;  
+        }
+        #id_tags div label {
+            border-radius: 9999px;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray-300);
+            width: auto;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        #id_tags input {
+            display: none;
+        }
+        #id_tags label:has(input:checked) {
+            background-color: var(--primary);
+            color: white;
+            border: 1px solid var(--primary);
+        }
+        
+        /* Textareas */
+        .textarea, textarea {
+            margin-bottom: 1rem;
+        }
+        
+        /* Error messages */
+        .errorlist li {
+            color: #EF4444;
+            padding: 0.5rem;
+            padding-left: 1rem;
+            border-left: 3px solid #EF4444;
+            margin-bottom: 1rem;
+            background-color: #FEF2F2;
+            border-radius: 0 0.25rem 0.25rem 0;
+        }
+        
+        /* Tabs */
+        .tab {
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            color: var(--gray-600); 
+            background-color: var(--gray-100);
+            border-radius: 0.5rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        .tab:hover {
+            background-color: var(--gray-200);
+        }
+        .tab.selected {
+            color: white;
+            background-color: var(--primary);
+        }
+        
+        /* Reply form */
+        .replyform {
+            border-top: none;
+        }
+        .replyform textarea, .replyform input {
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            margin-bottom: 0;
+            height: 3.2rem;
+        }
+        .replyform button {
+            margin-left: 0.5rem;
+            min-height: unset;
+        }
+        
+        /* Animations */
+        .fade-me-in.htmx-settling{
+            opacity: 0;
+        }
+        .fade-me-in {
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        /* Profile section */
+        #profile article figure img {
+            @apply aspect-[3/2] object-cover;
+        }
+        #profile article p {
+            @apply truncate leading-normal;
+        }
+        
+        /* Minimalist enhancements */
+        body {
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+        
+        /* Simplified shadows */
+        .card, .button, button, [type='submit'], [type='button'] {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Cleaner focus states */
+        button:focus, input:focus, textarea:focus {
+            outline: 2px solid var(--primary-light);
+            outline-offset: 2px;
+        }
+        
 </style>
 </head>
 
-<body class="bg-gray-100">
+<!-- <body class="bg-gray-200 font1"> -->
+<body class="bg-gray-200 font1">
 
 
     {% include 'includes/messages.html' %}
@@ -336,6 +412,10 @@
 
     <!-- layouts -->
     {% block layout %}
+    {% endblock %}
+
+
+    {% block javascript %}
     {% endblock %}
 
 

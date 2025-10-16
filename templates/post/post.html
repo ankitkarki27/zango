@@ -1,4 +1,10 @@
 {% load static %}
+<style>
+    p a {
+        @apply text-blue-600 underline hover:text-blue-800 transition-colors;
+    }
+</style>
+
 <article class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
     <!-- Post Header -->
     <div class="flex items-center justify-between px-4 py-2">
@@ -7,8 +13,10 @@
             <img class="w-10 h-10 rounded-full object-cover border border-gray-200"
                 src="{{ post.author.profile.avatar }}" alt="User Avatar">
             <div class="leading-4 mt-2">
-                <h3 class="text-sm font-semibold text-gray-900"><a href="{% url 'userprofile' post.author.username %}">{{ post.author }}</a> </h3>
+                <h3 class="text-sm font-semibold text-gray-900"><a
+                        href="{% url 'userprofile' post.author.username %}">{{ post.author }}</a> </h3>
                 <p class="text-xs text-gray-500">@{{ post.author.username }}</p>
+                
             </div>
             {% else %}
             <img class="w-10 h-10 rounded-full object-cover border border-gray-200"
@@ -17,9 +25,15 @@
                 <h3 class="text-sm font-semibold text-gray-900">No Author</h3>
                 <!-- <p class="text-xs text-gray-500">@{{ post.author.username }}</p> -->
             </div>
+
             {% endif %}
         </div>
+
+        <span class="text-xs text-gray-400  px-2 py-1 rounded-full">{{post.created_at|timesince}}
+                    ago</span>
         <div class="relative">
+            
+
             <a onclick="toggleMenu(this)" class="text-gray-800 hover:text-gray-700 cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
@@ -35,23 +49,22 @@
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Edit</a>
                 <a href="{% url 'post-delete' post.id %}"
                     class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-50">Delete</a>
-                 {% else %}
-                <a href="#"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Report</a>
-                 {% endif %}
+                {% else %}
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Report</a>
+                {% endif %}
             </div>
         </div>
     </div>
     <!-- Post Body / Description -->
     <div class="px-4 py-0">
-        <p class="text-sm font-semibold text-gray-800 mb-0">
-            {{ post.caption }}
+        <p class="text-base font-medium text-gray-800 mb-0">
+            {{ post.caption|urlize }}
         </p>
-        <!-- Only show description if it exists -->
+
         {% if post.description %}
         <div x-data="{ expanded: false }" class="mt-0 mb-2">
-            <p class="text-sm text-gray-800 whitespace-pre-line mt-0" :class="{'line-clamp-3': !expanded}">
-                {{ post.description }}
+            <p class="text-gray-800 text-xm whitespace-pre-line mt-0" :class="{'line-clamp-3': !expanded}">
+                {{ post.description|urlize }}
             </p>
 
             {% if post.description|length > 150 %}
@@ -87,27 +100,26 @@
 
     <!-- Post Actions -->
     <div class="px-4 py-3 flex items-center gap-4 text-gray-600 border-b border-gray-100">
-        <a href="#" class="text-gray-500 hover:text-red-500">
+        <a href="#" class="flex items-center space-x-1 text-gray-500 hover:text-red-500">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
+            <span class="text-sm font-medium">{{ post.comments.count }}</span>
         </a>
-        <a href="#" class="text-gray-500 hover:text-blue-500">
+
+        <a href="{% url 'post' post.id %}"
+            class="flex items-center space-x-1 text-gray-500 hover:text-blue-500 transition-colors duration-200">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                     d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
+            <span class="text-sm font-medium">{{ post.comments.count }}</span>
         </a>
-        <a href="#" class="text-gray-500 hover:text-green-500">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-            </svg>
-        </a>
+
+       
     </div>
 
 

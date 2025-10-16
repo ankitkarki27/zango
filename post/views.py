@@ -5,9 +5,10 @@ from django import forms
 from bs4 import BeautifulSoup
 import requests
 from django.contrib import messages
-from .forms import PostCreateForm, PostEditForm
+from .forms import PostCreateForm, PostEditForm, CommentCreateForm
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+import requests
 
 def home_view(request):
     posts = Post.objects.all().order_by('-created_at')
@@ -79,6 +80,20 @@ def home_view(request):
     
     return render(request, 'post/home.html', {'posts': posts, 'form': form, 'tags': tags})
 @login_required
+
+# tags of the post view
+def tag_posts_view(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    tags= Tag.objects.all()
+    posts = Post.objects.filter(tags=tag)
+    
+    context ={
+        'tag': tag,
+        'posts': posts,
+        'tags': tags
+    }
+    return render(request, 'post/tag_posts.html', context)
+
 def post_create_view(request):
     form = PostCreateForm()
     
@@ -193,16 +208,37 @@ def post_edit_view(request, pk):
 def post_detail_view(request, pk):
     # post = Post.objects.get(id=pk)
     post = get_object_or_404(Post, id=pk)
-    return render(request, 'post/post_detail.html', {'post': post})
-
-def tag_posts_view(request, slug):
-    tag = get_object_or_404(Tag, slug=slug)
-    tags= Tag.objects.all()
-    posts = Post.objects.filter(tags=tag)
+    commentForm = CommentCreateForm()
     
-    context ={
-        'tag': tag,
-        'posts': posts,
-        'tags': tags
+    context = {
+        'post':post,
+        'commentForm':commentForm
     }
-    return render(request, 'post/tag_posts.html', context)
+    return render(request, 'post/post_detail.html', context)
+
+@login_required
+def comment_sent(request, pk):
+    post = get_object_or_404(Post, id=pk)
+
+    if request.method == "POST":
+        form = CommentCreateForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.parent_post = post
+            comment.save()
+            messages.success(request, "Comment added successfully!")
+    return redirect('post', post.id)
+
+
+@login_required
+def comment_delete_view(request, pk):
+    # post = Post.objects.get(id=pk)
+    post = get_object_or_404(Comment, id=pk, author=request.user)  # Ensure only author can delete
+    if request.method == "POST":  # confirm delete
+        post.delete()
+        messages.success(request, "Comment deleted successfully!")
+        return redirect('post', post.parent_post.id)   # redirect back to home after deleting
+
+    return render(request, 'post/comment_delete.html', {'comment': post})
+

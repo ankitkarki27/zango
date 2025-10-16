@@ -41,8 +41,13 @@ class PostEditForm(ModelForm):
             'tags': forms.SelectMultiple(attrs={'class':'font-normal text-sm'}),
         }
     
-    # def clean_tags(self):
-    #     tags = self.cleaned_data.get('tags')
-    #     if not tags:
-    #         raise forms.ValidationError("Please select at least one tag.")
-    #     return tags
+class CommentCreateForm(ModelForm):
+    class Meta:
+        model=Comment
+        fields =['body']
+        widgets ={
+            'body': forms.TextInput(attrs={'placeholder': 'Comment here','class':'font-normal text-sm'}),
+        }
+        labels = {
+            'body':''
+        }

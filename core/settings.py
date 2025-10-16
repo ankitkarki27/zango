@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'users',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
+    'django_htmx',
+    'chat',
     
 ]
 
@@ -77,6 +79,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 MIDDLEWARE = [
+    'django_htmx.middleware.HtmxMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -87,6 +90,7 @@ MIDDLEWARE = [
     
     # Add the account middleware:
     "allauth.account.middleware.AccountMiddleware",
+    
 ]
 
 ROOT_URLCONF = 'core.urls'

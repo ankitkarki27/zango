@@ -8,9 +8,9 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='avatars/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     displayname = models.CharField(max_length=20, blank=True, null=True)
-    realname = models.CharField(max_length=50, blank=True, null=True)
+    # realname = models.CharField(max_length=50, blank=True, null=True)
     location = models.CharField(max_length=30, blank=True, null=True)
-    email = models.EmailField(max_length=254, blank=True, null=True)
+    # email = models.EmailField(max_length=254, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
@@ -19,7 +19,7 @@ class Profile(models.Model):
     @property
     def name(self):
         if self.displayname:
-            name = self.displayname
+            return self.displayname or f"{self.user.first_name} {self.user.last_name}".strip() or self.user.username
         else:
             name = self.user.username
         return name
@@ -29,5 +29,5 @@ class Profile(models.Model):
         try:
             avatar = self.image.url
         except:
-            avatar = static("images/avatar.svg")
+            avatar = static("images/default_avatar.svg")
         return avatar
